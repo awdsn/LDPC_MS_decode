@@ -1,0 +1,22 @@
+clear all
+[H,A,B,g,med,mid,Tget]=g_h;
+[s,x,jy]=g_h_encode(A,B,g,med,mid,Tget,H);%%编码
+
+y=BPSK(x,2.5);%%调价噪声信号，2.5为信噪比
+BER_yuanshi=error_rate_origin(s,y);%%%计算直接判决得出的BER
+ v_MS = MS_decode( H, y, 5 ,1);%%%MS译码后的错误比特数
+ BER_MS=compare_error_rate(s,v_MS);%%%%MS译码后的BER
+ BER_sum=128*BER_MS; 
+ 
+y=BPSK(x,3.5);
+fid=fopen('y_3.5.h','w');%写入文件路径
+[m,n]=size(y);
+ for i=1:1:m
+      for j=1:1:n
+            if j==n
+                fprintf(fid,'%g,\n',y(i,j));
+            else
+				fprintf(fid,'%g,\t',y(i,j));
+            end
+       end
+ end
